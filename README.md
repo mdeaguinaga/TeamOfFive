@@ -1,2 +1,8 @@
 # EMIS-Software-Engineering-Project
-Our group project
+Group 5
+
+David Thomas,
+Jeffrey Freeland,
+Octavio Camacho,
+Manuel De Aguinaga,
+Edward Conde,
