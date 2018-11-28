@@ -3,8 +3,12 @@ require "header.php";
 ?>
 
 <main>
-    <p> You are logged out!</p>
-    <p You are logged in!</p>
+    <div class="wrapper-main">
+        <section class=""section-default">
+            <p> You are logged out!</p>
+            <p You are logged in!</p>
+        </section>
+    </div>
 </main>
 
 <?php
