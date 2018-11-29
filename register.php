@@ -6,6 +6,33 @@ require "header.php";
     <div class="wrapper-main">
         <section class="section-default">
         <h1>Register patient</h1>
+          <? php_
+          /* Grabs error from URL */
+            if (isset($_GET['error'])) {
+                if ($_GET['error'] == "emptyfields") {
+                    echo '<p class ="registererror">Please fill in all fields</p>';
+                }
+                else if ($_GET['error'] == "invaliduidmail") {
+                    echo '<p class="registererror">Invalid Username and e-mail</p>';
+                }
+                else if ($_GET['error'] == "invaliduid") {
+                    echo '<p class="registererror">Invalid Username</p>';
+                }
+                else if ($_GET['error'] == "invalidmail") {
+                    echo '<p class="registererror">Invalid e-mail</p>';
+                }
+                else if ($_GET['error'] == "passwordcheck") {
+                    echo '<p class="registererror">Passwords do not match, please try again carefully</p>';
+                else if ($_GET['error'] == "usertaken") {
+                        echo '<p class="registererror">Username is already taken, please select another</p>';
+                    }
+                }
+                else if ($_GET["signup"] == "success") {
+                    echo '<p class="registersuccess">Patient successfully registered!</p>';
+                }
+
+            }
+          ?>
         <form class="form-register" action="includes/register.inc.php" method
         "post"></form>
         <div>

@@ -84,7 +84,7 @@ if (isset($_POST['register-submit'])) {
                   Gender, ethnicity, address, city, state, zipcode, homePhone, cellPhone, 
                   insuranceName, insuranceType, physician) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
                   ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = mysql_stmt_init($conn);
+                $stmt = mysql_stmt_init($pdo);
                 if (!mysql_stmt_prepare($stmt, $sql)) {
                     header("Location: ../register.php?error=sqlerror");
                     exit();
@@ -93,12 +93,12 @@ if (isset($_POST['register-submit'])) {
                     $hashpwd = password_hash($password, PASSWORD_DEFAULT);
 
 
-                    /*string inserts up to weight (double), height (int), then string insert the rest.
+                    /* string inserts up to weight (double), height (int), then string insert the rest.
                     21 Entries */
                     mysql_stmt_bind_param($stmt, "sssssssdissssssssssss", $username, $email, $password, $lastName, $firstName,
                         $MI, $DOB, $weight, $height, $SSN, $Gender, $ethnicity, $address, $city, $state, $zipcode, $homePhone,
                         $cellPhone, $insuranceName, $insuranceType, $physician);
-                    //will run the information in the database
+                    /* will run the information in the database */
                     mysql_stmt_execute($stmt);
                     mysql_stmt_store_result($stmt);
 
@@ -112,7 +112,7 @@ if (isset($_POST['register-submit'])) {
         }
     }
     mysql_stmt_close($stmt);
-    mysql_close($conn);
+    mysql_close($pdo);
 
     /* Allows admin to only use characters for users last name, first name, and middle initial
        Middle initial is allowed to be white space */
