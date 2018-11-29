@@ -10,6 +10,25 @@ if (isset($_POST['register-submit'])) {
     $email = $_POST['mail'];
     $password = $_POST['pwd'];
     $passwordVerify = $_POST['pwd-verify'];
+    $lastName = $_POST['lastName'];
+    $firstName = $_POST['firstName'];
+    $MI = $_POST['MI'];
+    $DOB = $_POST['DOB'];
+    $weight = $_POST['weight'];
+    $height = $_POST['height'];
+    $SSN = $_POST['SSN'];
+    $Gender = $_POST['Gender'];
+    $ethnicity = $_POST['ethnicity'];
+    $address = $_POST['address'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $zipcode = $_POST['zipcode'];
+    $homePhone = $_POST['homePhone'];
+    $cellPhone = $_POST['cellPhone'];
+    $insuranceName = $_POST['insuranceName'];
+    $insuranceType = $_POST['insuranceType'];
+    $physician = $_POST['physician'];
+
 
     /*Attempted to register without any fields */
     if (empty($username) || empty($email) || empty($password) || empty($passwordVerify)) {
@@ -35,7 +54,7 @@ if (isset($_POST['register-submit'])) {
     uidUsers=? using something called prepared statements, rather than just inserting $username this is
     to protect the users information */
     else {
-        $sql = "SELECT uidUsers FROM users WHERE uidUsers=?";
+        $sql = "SELECT ID FROM emis WHERE uidUsers=?";
         /*refers to our database using connection.php */
         $stmt = mysql_stmt_init($pdo);
         /* check to see if it failed */
@@ -60,9 +79,11 @@ if (isset($_POST['register-submit'])) {
                 exit();
             } //verified there is no redundant user, so we will insert
             else {
-                /* storing into database with idUsers, uidUsers, emailUsers, pwdUsers, inital value auto increments so,
-                start with uidUsers, which is username. */
-                $sql = "INSERT INTO users (uidUsers, emailUsers, pwdUsers) VALUES (?, ?, ?)";
+                /* storing into database initial value auto increments so start with uidUsers, which is username. */
+                $sql = "INSERT INTO emis (uidUsers, email, password, lastName, firstName, MI, DOB, weight, height, SSN,
+                  Gender, ethnicity, address, city, state, zipcode, homePhone, cellPhone, 
+                  insuranceName, insuranceType, physician) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 $stmt = mysql_stmt_init($conn);
                 if (!mysql_stmt_prepare($stmt, $sql)) {
                     header("Location: ../register.php?error=sqlerror");
@@ -72,8 +93,10 @@ if (isset($_POST['register-submit'])) {
                     $hashpwd = password_hash($password, PASSWORD_DEFAULT);
 
 
-                    //three string inserts
-                    mysql_stmt_bind_param($stmt, "sss", $username, $email, $password);
+                    //string inserts up to weight (double), height (int),
+                    mysql_stmt_bind_param($stmt, "sssssssdissssssssssss", $username, $email, $password, $lastName, $firstName,
+                        $MI, $DOB, $weight, $height, $SSN, $Gender, $ethnicity, $address, $city, $state, $zipcode, $homePhone,
+                        $cellPhone, $insuranceName, $insuranceType, $physician);
                     //will run the information in the database
                     mysql_stmt_execute($stmt);
                     mysql_stmt_store_result($stmt);
@@ -89,10 +112,23 @@ if (isset($_POST['register-submit'])) {
     }
     mysql_stmt_close($stmt);
     mysql_close($conn);
-}
-    /* User used URL rather than signing up, redirect */
-    else {
-        header("Location: ../register.php");
-        exit();
+
+    /* Allows admin to only use characters for users last name, first name, and middle initial
+       Middle initial is allowed to be white space */
+    if (!preg_match("/^[a-zA-Z ]*$/", $lastName) || !preg_match("/^[a-zA-Z ]*$/", $firstName) ||
+        !preg_match("/^[a-zA-Z ]*$/", $MI)) {
+        $nameErr = "Use only alphabetical characters or white space";
+    }
+
+    /* radio button for gender must be selected */
+    if (empty($Gender)) {
+        $genderErr = "Gender is required";
+    } else {
+        $gender = test_input($Gender);
+    }
+} /* User used URL rather than signing up, redirect */
+else {
+    header("Location: ../register.php");
+    exit();
 }
 
