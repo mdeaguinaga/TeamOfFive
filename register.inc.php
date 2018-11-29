@@ -93,7 +93,8 @@ if (isset($_POST['register-submit'])) {
                     $hashpwd = password_hash($password, PASSWORD_DEFAULT);
 
 
-                    //string inserts up to weight (double), height (int),
+                    /*string inserts up to weight (double), height (int), then string insert the rest.
+                    21 Entries */
                     mysql_stmt_bind_param($stmt, "sssssssdissssssssssss", $username, $email, $password, $lastName, $firstName,
                         $MI, $DOB, $weight, $height, $SSN, $Gender, $ethnicity, $address, $city, $state, $zipcode, $homePhone,
                         $cellPhone, $insuranceName, $insuranceType, $physician);
@@ -101,7 +102,7 @@ if (isset($_POST['register-submit'])) {
                     mysql_stmt_execute($stmt);
                     mysql_stmt_store_result($stmt);
 
-                    //Admin successfully registered user, so return with success message back to mainpage
+                    /*Admin successfully registered user, so return with success message back to mainpage */
                     header("Location: ../register.php?register=success");
                     exit();
                 }
